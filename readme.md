@@ -1,8 +1,22 @@
-# UniFit
-UniFit yra mobili programėlė, kuri seka naudotojo žingsnius, teikia taškus ir leidžia šiuos taškus išleisti įvairiems prizams.
+## Kaip testuosime?
+Naudosime jest Unit testų rašymui.
 
-# [UniFit administratoriaus sąsąja ](https://github.com/lukkuz1/Unifit_admin_panel)
-Administratoriaus sąsąja reikalinga norint moderuoti visus Firestore duomenis naudojamus programėlėje
+Mūsų testų failai privalo būti tokios struktūros
+(Test.test.tsx arba js formato)
+
+Instaliuojame visus reikalingus npm packages
+```bash
+npm install
+```
+
+Paleidžiame testus
+```bash
+npm test
+```
+
+
+
+
 
 
 ## Kaip pasileisti programėlę?
