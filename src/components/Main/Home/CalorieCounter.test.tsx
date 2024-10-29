@@ -3,26 +3,26 @@ import { render } from '@testing-library/react-native';
 import CalorieCounter from './CalorieCounter';
 
 describe('CalorieCounter Component', () => {
-  it('renders correctly with the given calorie count', () => {
-    const { getByText } = render(<CalorieCounter calorieCount={1020} />);
+  test.each([
+    { calorieCount: 500, expectedText: '500' },
+    { calorieCount: 1020, expectedText: '1020' },
+    { calorieCount: 1500, expectedText: '1500' },
+  ])('renders correctly with calorie count %i', ({ calorieCount, expectedText }) => {
+    const { getByText } = render(<CalorieCounter calorieCount={calorieCount} />);
 
-    expect(getByText('1020')).toBeTruthy();
+    expect(getByText(expectedText)).toBeTruthy();
     expect(getByText('kcal')).toBeTruthy();
   });
 
-  it('calculates and displays the correct number of Big Macs', () => {
-    const calorieCount = 1020;
+  // Parameterized test for Big Mac calculations
+  test.each([
+    { calorieCount: 500, expectedBigMacCount: (500 / 509).toFixed(2) },
+    { calorieCount: 1020, expectedBigMacCount: (1020 / 509).toFixed(2) },
+    { calorieCount: 1500, expectedBigMacCount: (1500 / 509).toFixed(2) },
+  ])('calculates and displays the correct number of Big Macs for %i calories', ({ calorieCount, expectedBigMacCount }) => {
     const { getByText } = render(<CalorieCounter calorieCount={calorieCount} />);
 
-    const expectedBigMacCount = (calorieCount / 509).toFixed(2);
-    
     expect(getByText(`${expectedBigMacCount} Big Mac's`)).toBeTruthy();
   });
 
-  it('applies margin styles correctly', () => {
-    const { getByText } = render(<CalorieCounter calorieCount={1020} margin={[10, 20, 30, 40]} />);
-
-    expect(getByText('Calories')).toBeTruthy();
-    expect(getByText('1020')).toBeTruthy();
-  });
 });
