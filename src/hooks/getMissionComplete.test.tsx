@@ -10,6 +10,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
+import firebaseServices from "src/services/firebase";
 
 jest.mock("firebase/firestore", () => ({
   collection: jest.fn(),
@@ -19,6 +20,7 @@ jest.mock("firebase/firestore", () => ({
   doc: jest.fn(),
   updateDoc: jest.fn(),
 }));
+
 jest.mock("src/services/firebase", () => ({
   db: {},
   auth: { currentUser: { email: "testuser@example.com" } },
@@ -43,14 +45,14 @@ describe("Mission Completion Functions", () => {
   });
 
   describe("getStepCountMissionComplete", () => {
+    
+
     it("logs a message if no 'Steps' missions are found", async () => {
       (getDocs as jest.Mock).mockResolvedValueOnce({ empty: true });
 
       await getStepCountMissionComplete("referenceMission");
 
-      expect(console.log).toHaveBeenCalledWith(
-        "No missions of type 'Step' found."
-      );
+      expect(console.log).toHaveBeenCalledWith("No missions of type 'Step' found.");
     });
 
     it("handles errors during mission query and update", async () => {
@@ -67,6 +69,7 @@ describe("Mission Completion Functions", () => {
   });
 
   describe("getCalorieMissionComplete", () => {
+
     it("logs a message if no 'BigMac' mission is found", async () => {
       (getDocs as jest.Mock).mockResolvedValueOnce({ empty: true });
 
@@ -89,4 +92,26 @@ describe("Mission Completion Functions", () => {
       );
     });
   });
+
+  describe.each([
+    ["Steps", "Step", getStepCountMissionComplete],
+    ["BigMac", "BigMac", getCalorieMissionComplete],
+  ])(
+    "Parameterized tests for different mission types",
+    (missionType, missionMessage, missionCompleteFunction) => {
+    
+
+      it(`handles errors gracefully for '${missionType}' missions`, async () => {
+        const mockError = new Error("Firestore error");
+        (getDocs as jest.Mock).mockRejectedValueOnce(mockError);
+
+        await missionCompleteFunction("referenceMission");
+
+        expect(console.error).toHaveBeenCalledWith(
+          "Error fetching or updating user missions:",
+          mockError
+        );
+      });
+    }
+  );
 });
