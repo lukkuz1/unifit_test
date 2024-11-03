@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 import { View, Text, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
 import { Logo } from 'src/constants/Enums';
-import GoogleSVG from 'src/assets/svg/google.svg'
-import FacebookSVG from 'src/assets/svg/facebook.svg'
+import GoogleSVG from 'src/assets/svg/google.svg';
+import FacebookSVG from 'src/assets/svg/facebook.svg';
 
 type Props = {
   text: string;
@@ -10,21 +10,26 @@ type Props = {
   buttonColor: string;
   margin?: [top: number, bottom: number, left: number, right: number];
   style?: StyleProp<ViewStyle>;
-  logo?: Logo,
+  logo?: Logo;
   onPress?: () => void;
+};
 
-}
-
-export default function EntryButton({ text, textColor, buttonColor, margin = [0, 0, 0, 0], logo, style, onPress }: Props) {
-
-  let svg: ReactNode
+export default function EntryButton({ 
+  text, 
+  textColor, 
+  buttonColor, 
+  margin = [0, 0, 0, 0], 
+  logo, 
+  style, 
+  onPress 
+}: Props) {
+  let svg: ReactNode;
 
   if (logo === Logo.GOOGLE) {
-    svg = <GoogleSVG width={26} height={26} />
+    svg = <GoogleSVG width={26} height={26} testID="google-logo" />;
   } else if (logo === Logo.FACEBOOK) {
-    svg = <FacebookSVG width={26} height={26} fill="#fff" />
+    svg = <FacebookSVG width={26} height={26} fill="#fff" testID="facebook-logo" />;
   }
-
 
   return (
     <View
@@ -50,7 +55,7 @@ export default function EntryButton({ text, textColor, buttonColor, margin = [0,
           <View style={styles.svg}>
             {svg}
           </View>
-          <Text style={[styles.text, { color: textColor }]} >{text}</Text>
+          <Text style={[styles.text, { color: textColor }]}>{text}</Text>
         </View>
       </Pressable>
     </View>

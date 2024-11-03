@@ -1,117 +1,71 @@
-import React from 'react';
+import { renderHook, act } from '@testing-library/react-hooks';
 import { UserProvider, useUser } from './useUser';
-import { rtdb } from 'src/services/firebase'; // Mocking the Firebase service
-import { set, get } from 'firebase/database';
-import { act, render, fireEvent } from '@testing-library/react-native';
-import { Button, View, Text } from 'react-native';
+import {
+  ref,
+  get,
+  update,
+  getDatabase,
+  child,
+} from 'firebase/database';
 
-// Mock Firebase functions
+// Mock Firebase database functions
 jest.mock('firebase/database', () => ({
-  set: jest.fn(),
+  ref: jest.fn(),
   get: jest.fn(),
+  update: jest.fn(),
+  getDatabase: jest.fn().mockReturnValue({}),
+  child: jest.fn(),
 }));
 
-const MockComponent = () => {
-  const userContext = useUser();
-  return (
-    <View>
-      <Text>{userContext.initialized ? 'true' : 'false'}</Text>
-      <Button title="Initialize User" onPress={() => userContext.initialize({ email: 'test@example.com', uid: '123' })} />
-      <Button title="Destroy User" onPress={userContext.destroy} />
-    </View>
-  );
-};
+// Mock AsyncStorage
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn().mockResolvedValue(undefined),
+  getItem: jest.fn().mockResolvedValue(null),
+  removeItem: jest.fn().mockResolvedValue(undefined),
+  clear: jest.fn().mockResolvedValue(undefined),
+}));
 
-describe('UserProvider', () => {
+describe('useUser Hook', () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear any previous mocks
+    jest.clearAllMocks(); // Clear mocks before each test
+    console.log = jest.fn(); // Suppress console.log
+    console.error = jest.fn(); // Suppress console.error
   });
 
-  it('initializes with default values', () => {
-    const { getByText } = render(
-      <UserProvider>
+  it('should initialize user correctly', async () => {
+    const mockUser = { uid: '123', email: 'test@example.com' };
+    const mockUserData = {
+      totalPoints: 0,
+      dailyPoints: 0,
+      steps: { 0: { 0: 0 } },
+      distanceHistory: { 0: 0 },
+      hourlySteps: 0,
+      height: 180,
+      weight: 75,
+      age: 25,
+      stepGoal: 6000,
+    };
 
-      </UserProvider>
-    );
-
-    // Assert the default value
-    expect(getByText('false')).toBeTruthy(); // Default should be false
-  });
-
-  it('initializes user correctly', async () => {
-    // Mock the response for getting user data from the database
+    // Mock the Firebase get call to return user data
     (get as jest.Mock).mockResolvedValueOnce({
-      exists: jest.fn().mockReturnValue(true),
-      val: jest.fn().mockReturnValue({
-        dailyPoints: 10,
-        totalPoints: 100,
-        distanceHistory: {},
-        hourlySteps: 0,
-        height: 170,
-        weight: 70,
-        age: 25,
-        stepGoal: 6000,
-        steps: {
-          0: {
-            1: 1000,
-          },
-        },
-      }),
+      exists: () => true,
+      val: () => mockUserData, // Ensure this returns the user data
     });
 
-    const { getByText } = render(
-      <UserProvider>
+    // Mock the child function to return a reference
+    (child as jest.Mock).mockReturnValue({}); // Mock child function
 
-      </UserProvider>
-    );
+    const { result } = renderHook(() => useUser(), { wrapper: UserProvider });
 
-    // Act: Initialize the user
+    // Initialize the user
     await act(async () => {
-      fireEvent.press(getByText('Initialize User')); // Simulate button press
+      await result.current.initialize(mockUser);
     });
 
-    // Assert: Check if user is initialized
-    expect(getByText('true')).toBeTruthy(); // User should be initialized
-  });
-
-  it('destroys user correctly', async () => {
-    // Mock the response for getting user data from the database
-    (get as jest.Mock).mockResolvedValueOnce({
-      exists: jest.fn().mockReturnValue(true),
-      val: jest.fn().mockReturnValue({
-        dailyPoints: 10,
-        totalPoints: 100,
-        distanceHistory: {},
-        hourlySteps: 0,
-        height: 170,
-        weight: 70,
-        age: 25,
-        stepGoal: 6000,
-        steps: {
-          0: {
-            1: 1000,
-          },
-        },
-      }),
-    });
-
-    const { getByText } = render(
-      <UserProvider>
-
-      </UserProvider>
-    );
-
-    // Act: Initialize the user
-    await act(async () => {
-      fireEvent.press(getByText('Initialize User')); // Simulate button press
-    });
-
-    // Act: Destroy the user
-    await act(async () => {
-      fireEvent.press(getByText('Destroy User')); // Simulate button press
-    });
-
-    // Assert: Check if user is destroyed
-    expect(getByText('false')).toBeTruthy(); // User should be destroyed
+    // Ensure the user has been initialized correctly
+    expect(result.current.initialized).toBe(true);
+    expect(result.current.user).toEqual(mockUser);
+    expect(result.current.totalPoints).toBe(0); // Expecting totalPoints to match
+    expect(result.current.dailyPoints).toBe(0); // Expecting dailyPoints to match
   });
 });

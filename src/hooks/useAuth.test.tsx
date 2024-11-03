@@ -1,46 +1,108 @@
-// AuthProvider.simple.test.tsx
-import React from "react";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import firebase from "src/services/firebase";
-import { AuthProvider, useAuth } from "./useAuth"
-import { render } from "@testing-library/react";
+// src/hooks/useAuth.test.tsx
+import { renderHook, act } from '@testing-library/react-hooks';
+import { AuthProvider, useAuth } from './useAuth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+} from 'firebase/auth';
 
-
-jest.mock("firebase/auth", () => ({
-  signInWithEmailAndPassword: jest.fn(),
+// Mock Firebase authentication functions
+jest.mock('firebase/auth', () => ({
   createUserWithEmailAndPassword: jest.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+  signOut: jest.fn(),
 }));
 
-// Mock the Firebase service
-jest.mock("src/services/firebase", () => ({
+// Mock Firebase services
+jest.mock('src/services/firebase', () => ({
   auth: {
-    currentUser: null,
+    onAuthStateChanged: jest.fn((callback) => {
+      callback(null); // Initially set user to null
+      return jest.fn(); // Return unsubscribe function
+    }),
   },
 }));
 
-describe("AuthProvider", () => {
-  it("calls signIn when the signIn function is invoked", async () => {
-    const mockUserCredential = { user: { email: "testuser@example.com", uid: "12345" } };
+describe('useAuth Hook', () => {
+  beforeEach(() => {
+    jest.clearAllMocks(); // Clear mocks before each test
+    jest.spyOn(console, 'log').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  it('should sign up a user', async () => {
+    const mockUser = { uid: '123', email: 'test@example.com' };
+    const mockUserCredential = { user: mockUser };
+
+    (createUserWithEmailAndPassword as jest.Mock).mockResolvedValueOnce(mockUserCredential);
+
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      const response = await result.current.signUp('test@example.com', 'password');
+      expect(response).toEqual(mockUserCredential); // Expect the response to match mockUserCredential
+    });
+
+    expect(result.current.user).toEqual(mockUser); // Expect user to be set after sign up
+  });
+
+  it('should sign in a user', async () => {
+    const mockUser = { uid: '123', email: 'test@example.com' };
+    const mockUserCredential = { user: mockUser };
+
     (signInWithEmailAndPassword as jest.Mock).mockResolvedValueOnce(mockUserCredential);
 
-    const TestComponent = () => {
-      const auth = useAuth();
-      const handleSignIn = async () => {
-        await auth.signIn("testuser@example.com", "password123");
-      };
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
-      React.useEffect(() => {
-        handleSignIn(); // Automatically call signIn on mount
-      }, []);
+    await act(async () => {
+      const response = await result.current.signIn('test@example.com', 'password');
+      expect(response).toEqual(mockUserCredential); // Expect the response to match mockUserCredential
+    });
 
-      return null; // Render nothing
-    };
+    expect(result.current.user).toEqual(mockUser); // Expect user to be set after sign in
+  });
 
-    render(
-      <AuthProvider>
-      </AuthProvider>
-    );
+  it('should sign out a user', async () => {
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
 
-    expect(signInWithEmailAndPassword).toHaveBeenCalledWith(firebase.auth, "testuser@example.com", "password123");
+    await act(async () => {
+      await result.current.signOut();
+    });
+
+    expect(result.current.user).toBeNull(); // Expect user to be null after sign out
+  });
+
+  it('handles sign up errors gracefully', async () => {
+    const mockError = new Error('auth/invalid-email');
+    (createUserWithEmailAndPassword as jest.Mock).mockRejectedValueOnce(mockError);
+
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    const response = await result.current.signUp('test@example.com', 'password');
+    expect(response).toEqual(mockError.message); // Expect the error message to match
+  });
+
+  it('handles sign in errors gracefully', async () => {
+    const mockError = new Error('auth/user-not-found');
+    (signInWithEmailAndPassword as jest.Mock).mockRejectedValueOnce(mockError);
+
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    const response = await result.current.signIn('test@example.com', 'password');
+    expect(response).toEqual(mockError.message); // Expect the error message to match
+  });
+
+  it('handles sign out errors gracefully', async () => {
+    const mockError = new Error('auth/no-current-user');
+    (firebaseSignOut as jest.Mock).mockRejectedValueOnce(mockError);
+
+    const { result } = renderHook(() => useAuth(), { wrapper: AuthProvider });
+
+    await act(async () => {
+      await result.current.signOut();
+    });
+
+    expect(result.current.user).toBeNull(); // Expect user to be null even after error
   });
 });

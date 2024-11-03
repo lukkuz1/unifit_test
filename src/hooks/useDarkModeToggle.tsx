@@ -5,22 +5,19 @@ const useDarkModeToggle = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
-    const fetchDarkMode = async () => {
+    const fetchInitialSetting = async () => {
+      const setting = await fetchDarkModeSetting();
+      setDarkMode(setting);
+    };
+
+    fetchInitialSetting();
+
+    const intervalId = setInterval(async () => {
       const darkModeSetting = await fetchDarkModeSetting();
       setDarkMode(darkModeSetting);
-    };
-  
-    fetchDarkMode();
-  }, []);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchDarkModeSetting().then((darkModeSetting) => {
-        setDarkMode(darkModeSetting);
-      });
     }, 100);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   return darkMode;
