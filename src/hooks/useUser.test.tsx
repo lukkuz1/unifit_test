@@ -1,15 +1,8 @@
-import { renderHook, act } from '@testing-library/react-hooks';
-import { UserProvider, useUser } from './useUser';
-import {
-  ref,
-  get,
-  update,
-  getDatabase,
-  child,
-} from 'firebase/database';
+import { renderHook, act } from "@testing-library/react-hooks";
+import { UserProvider, useUser } from "./useUser";
+import { ref, get, update, getDatabase, child } from "firebase/database";
 
-// Mock Firebase database functions
-jest.mock('firebase/database', () => ({
+jest.mock("firebase/database", () => ({
   ref: jest.fn(),
   get: jest.fn(),
   update: jest.fn(),
@@ -17,23 +10,22 @@ jest.mock('firebase/database', () => ({
   child: jest.fn(),
 }));
 
-// Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
+jest.mock("@react-native-async-storage/async-storage", () => ({
   setItem: jest.fn().mockResolvedValue(undefined),
   getItem: jest.fn().mockResolvedValue(null),
   removeItem: jest.fn().mockResolvedValue(undefined),
   clear: jest.fn().mockResolvedValue(undefined),
 }));
 
-describe('useUser Hook', () => {
+describe("useUser Hook", () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear mocks before each test
-    console.log = jest.fn(); // Suppress console.log
-    console.error = jest.fn(); // Suppress console.error
+    jest.clearAllMocks();
+    console.log = jest.fn();
+    console.error = jest.fn();
   });
 
-  it('should initialize user correctly', async () => {
-    const mockUser = { uid: '123', email: 'test@example.com' };
+  it("should initialize user correctly", async () => {
+    const mockUser = { uid: "123", email: "test@example.com" };
     const mockUserData = {
       totalPoints: 0,
       dailyPoints: 0,
@@ -46,26 +38,22 @@ describe('useUser Hook', () => {
       stepGoal: 6000,
     };
 
-    // Mock the Firebase get call to return user data
     (get as jest.Mock).mockResolvedValueOnce({
       exists: () => true,
-      val: () => mockUserData, // Ensure this returns the user data
+      val: () => mockUserData,
     });
 
-    // Mock the child function to return a reference
-    (child as jest.Mock).mockReturnValue({}); // Mock child function
+    (child as jest.Mock).mockReturnValue({});
 
     const { result } = renderHook(() => useUser(), { wrapper: UserProvider });
 
-    // Initialize the user
     await act(async () => {
       await result.current.initialize(mockUser);
     });
 
-    // Ensure the user has been initialized correctly
     expect(result.current.initialized).toBe(true);
     expect(result.current.user).toEqual(mockUser);
-    expect(result.current.totalPoints).toBe(0); // Expecting totalPoints to match
-    expect(result.current.dailyPoints).toBe(0); // Expecting dailyPoints to match
+    expect(result.current.totalPoints).toBe(0);
+    expect(result.current.dailyPoints).toBe(0);
   });
 });

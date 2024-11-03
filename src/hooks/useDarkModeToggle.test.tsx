@@ -1,33 +1,24 @@
-import useDarkModeToggle from './useDarkModeToggle';
-import { fetchDarkModeSetting } from '../constants/DarkMode';
-import { act, renderHook } from '@testing-library/react-hooks';
+import useDarkModeToggle from "./useDarkModeToggle";
+import { fetchDarkModeSetting } from "../constants/DarkMode";
+import { act, renderHook } from "@testing-library/react-hooks";
 
-// Mock the fetchDarkModeSetting function
-jest.mock('../constants/DarkMode', () => ({
+jest.mock("../constants/DarkMode", () => ({
   fetchDarkModeSetting: jest.fn(),
 }));
 
-describe('useDarkModeToggle', () => {
+describe("useDarkModeToggle", () => {
   beforeEach(() => {
-    jest.clearAllMocks(); // Clear mocks before each test
-    jest.useFakeTimers(); // Set up fake timers for controlling intervals
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.clearAllTimers(); // Clear timers after each test
+    jest.clearAllTimers();
   });
-  it('returns true when fetchDarkModeSetting resolves to true', async () => {
-    // Mock the fetchDarkModeSetting to return true
+  it("returns true when fetchDarkModeSetting resolves to true", async () => {
     (fetchDarkModeSetting as jest.Mock).mockResolvedValueOnce(true);
-
-    // Render the hook
     const { result, waitForNextUpdate } = renderHook(() => useDarkModeToggle());
-
-    // Wait for the hook to update
     await waitForNextUpdate();
-
-    // Assert: Check the result of the hook
-    expect(result.current).toBe(true); // Check if darkMode is set to true
+    expect(result.current).toBe(true);
   });
-
 });
