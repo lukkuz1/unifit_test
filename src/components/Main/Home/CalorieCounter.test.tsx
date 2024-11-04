@@ -9,7 +9,6 @@ describe('CalorieCounter Component', () => {
     { calorieCount: 1500, expectedText: '1500' },
   ])('renders correctly with calorie count %i', ({ calorieCount, expectedText }) => {
     const { getByText } = render(<CalorieCounter calorieCount={calorieCount} />);
-
     expect(getByText(expectedText)).toBeTruthy();
     expect(getByText('kcal')).toBeTruthy();
   });
