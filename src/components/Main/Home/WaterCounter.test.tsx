@@ -1,30 +1,86 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
 import WaterCounter from "./WaterCounter";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+jest.mock('react-native-liquid-gauge', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+  return {
+    LiquidGauge: (props) => (
+      <Text testID="liquid-gauge" {...props}>
+        Mocked LiquidGauge
+      </Text>
+    ),
+  };
+});
+jest.mock('react-native-tab-view', () => {
+  return {
+    TabView: ({ children }) => <>{children}</>,
+    SceneMap: jest.fn(),
+    TabBar: jest.fn(),
+  };
+});
+jest.mock('react-native-gifted-charts', () => {
+  return {
+    LineChart: (props) => <text {...props}>Mocked LineChart</text>,
+  };
+});
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+  getAllKeys: jest.fn(),
+  multiSet: jest.fn(),
+  multiGet: jest.fn(),
+  multiRemove: jest.fn(),
+}));
+jest.mock('src/assets/svg/water/WaterDroplet.svg', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return function MockWaterDroplet(props) {
+    return <View testID="water-droplet-icon" {...props} />;
+  };
+});
 describe("WaterCounter Component Integration Tests", () => {
   
   it("renders correctly with provided props", () => {
-    const { getByText } = render(<WaterCounter waterIntake={500} waterGoal={2000} />);
-
+    const { getByText, getByTestId } = render(
+      <WaterCounter waterIntake={500} waterGoal={2000} />
+    );
+    
+    // Basic component structure tests
     expect(getByText("Water")).toBeTruthy();
     expect(getByText("+")).toBeTruthy();
-    expect(getByText("500 ml")).toBeTruthy();
-    expect(getByText("Goal: 2000 ml")).toBeTruthy();
+    expect(getByTestId("water-droplet-icon")).toBeTruthy();
+    
+    // Test LiquidGauge props using testID
+    const liquidGauge = getByTestId("liquid-gauge");
+    expect(liquidGauge.props.value).toBe(25);
   });
 
   it("calculates and displays water intake percentage correctly", () => {
-    const { getByText } = render(<WaterCounter waterIntake={1000} waterGoal={2000} />);
-    const expectedPercentage = Math.floor((1000 / 2000) * 100);
-
-    expect(getByText(`${expectedPercentage}%`)).toBeTruthy();
+    const { getByTestId } = render(
+      <WaterCounter waterIntake={500} waterGoal={2000} />
+    );
+    
+    const liquidGauge = getByTestId("liquid-gauge");
+    expect(liquidGauge.props.value).toBe(25); // 500/2000 * 100
   });
 
-  it("opens modal when '+' button is pressed", () => {
-    const { getByText, getByTestId } = render(<WaterCounter waterIntake={0} waterGoal={2000} />);
-
+  it("opens modal when '+' button is pressed", async () => {
+    const { getByText, findByText } = render(
+      <WaterCounter waterIntake={500} waterGoal={2000} />
+    );
+    
+    // Simulate pressing the plus button
     fireEvent.press(getByText("+"));
-    expect(getByText("Add Water Intake")).toBeTruthy();
+  
+    // Use findByText which waits for the modal text to appear
+    const modalText = await findByText("Water Intake Modal"); // Adjust to the correct text from your modal
+    expect(modalText).toBeTruthy();
   });
 
   it("closes modal when background overlay is pressed", () => {

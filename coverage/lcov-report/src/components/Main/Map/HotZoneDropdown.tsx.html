@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>5/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -155,40 +155,40 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -226,13 +226,13 @@ interface HotZoneDropdownProps {
   onHotZoneSelectionChange: (selectedHotZone: HotZone) =&gt; void;
 }
 &nbsp;
-const HotZoneDropdown: React.FC&lt;HotZoneDropdownProps&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span></span>
+const HotZoneDropdown: React.FC&lt;HotZoneDropdownProps&gt; = ({
   hotZones,
   selectedHotZoneName,
   onHotZoneSelectionChange,
 }) =&gt; {
 &nbsp;
-  const handleValueChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>temValue: string, itemIndex: number) =&gt; {</span>
+  const handleValueChange = <span class="fstat-no" title="function not covered" >(i</span>temValue: string, itemIndex: number) =&gt; {
     // Resets to default state if the placeholder is selected
 <span class="cstat-no" title="statement not covered" >    if (itemValue === "" &amp;&amp; itemIndex === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
@@ -240,7 +240,7 @@ const HotZoneDropdown: React.FC&lt;HotZoneDropdownProps&gt; = <span class="cstat
 <span class="cstat-no" title="statement not covered" >    onHotZoneSelectionChange(hotZones[itemIndex - 1]);</span>
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;View style={styles.dropdownContainer}&gt;
       &lt;Picker
         selectedValue={selectedHotZoneName}
@@ -250,8 +250,8 @@ const HotZoneDropdown: React.FC&lt;HotZoneDropdownProps&gt; = <span class="cstat
       &gt;
         &lt;Picker.Item label="Available hot zones" value="" /&gt;
 &nbsp;
-        {hotZones.map(<span class="fstat-no" title="function not covered" >(h</span>otZone, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >          &lt;Picker.Item key={index} label={hotZone.name} value={hotZone.name} /&gt;</span>
+        {hotZones.map((hotZone, index) =&gt; (
+          &lt;Picker.Item key={index} label={hotZone.name} value={hotZone.name} /&gt;
         ))}
 &nbsp;
       &lt;/Picker&gt;
@@ -259,7 +259,7 @@ const HotZoneDropdown: React.FC&lt;HotZoneDropdownProps&gt; = <span class="cstat
   );
 };
 &nbsp;
-const styles = <span class="cstat-no" title="statement not covered" >StyleSheet.create({</span>
+const styles = StyleSheet.create({
   dropdownContainer: {
     backgroundColor: Colors.HeaderDarkerGreen,
     borderRadius: 50,
@@ -283,7 +283,7 @@ export default HotZoneDropdown;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-04T01:49:18.525Z
+                at 2024-11-04T10:19:53.989Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

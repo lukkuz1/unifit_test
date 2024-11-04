@@ -4,11 +4,23 @@ import PrizeDropdown from './PrizeDropdown';
 import { useUser } from 'src/hooks/useUser';
 import { getStorage, getDownloadURL } from 'firebase/storage';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 
 jest.mock('src/hooks/useUser');
 
 jest.mock('firebase/storage');
 jest.mock('firebase/firestore');
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+  clear: jest.fn(),
+  getAllKeys: jest.fn(),
+  multiSet: jest.fn(),
+  multiGet: jest.fn(),
+  multiRemove: jest.fn(),
+}));
 
 const mockUser = {
   user: { uid: 'user123' },
