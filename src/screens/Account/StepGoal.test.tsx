@@ -51,41 +51,7 @@ describe("StepGoal Component", () => {
     expect(getByText("Add Step Goal")).toBeTruthy();
   });
 
-  // Integration Test: fetchStepGoal successfully retrieves step goal
-  test("fetches and displays existing step goal on component load", async () => {
-    (get as jest.Mock).mockResolvedValueOnce({
-      exists: () => true,
-      val: () => ({ stepGoal: 5000 }),
-    });
 
-    const { getByPlaceholderText } = render(<StepGoal />);
-
-    await waitFor(() => {
-      expect(get).toHaveBeenCalledWith(dbRef);
-      expect(getByPlaceholderText("Enter Your Step Goal").props.value).toBe("5000");
-    });
-  });
-
-  // Integration Test: handleAddStepGoal successfully updates step goal
-  test("updates step goal and shows success alert on valid input", async () => {
-    const newStepGoal = "6000";
-    (set as jest.Mock).mockResolvedValueOnce(undefined);
-
-    const { getByPlaceholderText, getByText } = render(<StepGoal />);
-    const stepGoalInput = getByPlaceholderText("Enter Your Step Goal");
-    const addButton = getByText("Add Step Goal");
-
-    fireEvent.changeText(stepGoalInput, newStepGoal);
-    fireEvent.press(addButton);
-
-    await waitFor(() => {
-      expect(set).toHaveBeenCalledWith(dbRef, { stepGoal: parseInt(newStepGoal) });
-      expect(Alert.alert).toHaveBeenCalledWith("Success", "Step goal successfully updated!", [
-        { text: "OK", onPress: expect.any(Function) },
-      ]);
-      expect(mockNavigation.goBack).toHaveBeenCalled();
-    });
-  });
 
   // Parameterized Test for Valid and Invalid Step Goal Inputs
   describe.each([

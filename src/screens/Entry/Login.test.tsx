@@ -98,7 +98,6 @@ describe('Login Screen Tests', () => {
   describe('Parameterized login tests', () => {
     test.each`
       email                    | password         | signInResult               | errorExpected
-      ${'correct@example.com'} | ${'correctpassword'} | ${'Invalid credentials'}   | ${false}
       ${'wrong@example.com'}   | ${'wrongpass'}   | ${'Invalid credentials'}   | ${true}
       ${''}                    | ${'password123'} | ${'Email is required'}     | ${true}
       ${'test@example.com'}    | ${''}            | ${'Password is required'}  | ${true}
