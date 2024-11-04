@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, Alert, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import EntryInputField from 'src/components/Entry/EntryInputField';
 import EntryButton from 'src/components/Entry/EntryButton';
 import Colors from 'src/constants/Colors';
 import firebase from 'src/services/firebase';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
+// Define the type for the navigation stack
+type RootStackParamList = {
+  Login: undefined; // Add other screens as needed
+};
+
+// Use the defined type in useNavigation
 const ForgotPassword = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [email, setEmail] = useState('');
 
   const handleForgotPassword = async () => {
@@ -22,8 +28,8 @@ const ForgotPassword = () => {
         'Password Reset Email Sent',
         'If you have an account, check your email address for a password reset link.'
       );
-      navigation.navigate('Login');
-    } catch (error) {
+      navigation.navigate('Login'); // TypeScript now recognizes "Login" as a valid route
+    } catch (error: any) {
       if (error.code === 'auth/invalid-email') {
         Alert.alert('Invalid Email', 'Please enter a valid email address.');
       } else if (error.code === 'auth/user-not-found') {

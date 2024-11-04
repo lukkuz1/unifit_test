@@ -12,6 +12,7 @@ type Props = {
   margin?: [top: number, bottom: number, left: number, right: number];
   onChangeText: (text: string) => void;
   keyboardType?: KeyboardTypeOptions;
+  value?: string;
 }
 
 export default function EntryInputField({ headerText, placeholderText, isPassword, margin = [0, 0, 0, 0], keyboardType, style, headerStyle, postfix = "", onChangeText }: Props) {

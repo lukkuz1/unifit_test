@@ -26,7 +26,7 @@ const DeleteAccount = () => {
   };
 
   return (
-    <LinearGradient colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]} style={styles.container}>
+   //<LinearGradient colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]} style={styles.container}>
       <View>
         <Text style={styles.label}>Delete your account</Text>
         <EntryButton
@@ -37,7 +37,7 @@ const DeleteAccount = () => {
           onPress={handleDeleteAccount}
         />
       </View>
-    </LinearGradient>
+    //</LinearGradient>
   );
 };
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import Entry from './Register';
 import { useAuth } from 'src/hooks/useAuth';
@@ -24,6 +25,9 @@ describe('Entry Component', () => {
     (useAuth as jest.Mock).mockImplementation(() => mockAuth);
   });
 
+  jest.spyOn(Alert, 'alert');
+
+  // Unit Test
   test('navigates to login screen when "Log in!" is pressed', () => {
     const { getByText } = render(<Entry />);
     const loginText = getByText('Log in!');
@@ -32,12 +36,13 @@ describe('Entry Component', () => {
     expect(mockNavigation.navigate).toHaveBeenCalledWith('Login');
   });
 
-  // Additional Integration Test
-  test('calls signUp function with correct email and password when "Sign Up" button is pressed', async () => {
+  // Integration Test
+  test('displays alert and navigates to login on successful sign-up', async () => {
+    mockAuth.signUp.mockResolvedValueOnce(undefined); // Mock successful sign-up
     const { getByPlaceholderText, getByText } = render(<Entry />);
-    
-    const emailInput = getByPlaceholderText('Email');
-    const passwordInput = getByPlaceholderText('Password');
+
+    const emailInput = getByPlaceholderText('example@gmail.com');
+    const passwordInput = getByPlaceholderText('Enter Your Password');
     const signUpButton = getByText('Sign Up');
 
     fireEvent.changeText(emailInput, 'test@example.com');
@@ -46,6 +51,7 @@ describe('Entry Component', () => {
 
     await waitFor(() => {
       expect(mockAuth.signUp).toHaveBeenCalledWith('test@example.com', 'password123');
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Login');
     });
   });
 
@@ -59,8 +65,8 @@ describe('Entry Component', () => {
     test(`sign up should ${shouldSignUp ? '' : 'not '}be called`, async () => {
       const { getByPlaceholderText, getByText } = render(<Entry />);
 
-      const emailInput = getByPlaceholderText('Email');
-      const passwordInput = getByPlaceholderText('Password');
+      const emailInput = getByPlaceholderText('example@gmail.com');
+      const passwordInput = getByPlaceholderText('Enter Your Password');
       const signUpButton = getByText('Sign Up');
 
       fireEvent.changeText(emailInput, email);
@@ -69,9 +75,9 @@ describe('Entry Component', () => {
 
       await waitFor(() => {
         if (shouldSignUp) {
-          expect(mockAuth.signUp).toHaveBeenCalledWith(email, password);
+          expect(Alert.alert).toHaveBeenCalledWith('Verification link sent to your email', 'Confirm your email to login in to application.');
         } else {
-          expect(mockAuth.signUp).not.toHaveBeenCalled();
+          expect(mockAuth.signUp).not.toHaveBeenCalledWith('Verification link sent to your email', 'Confirm your email to login in to application.');
         }
       });
     });

@@ -7,7 +7,7 @@ import useDarkModeToggle from 'src/hooks/useDarkModeToggle';
 export default function AboutUs() {
     const darkMode = useDarkModeToggle();
     return (
-        <LinearGradient colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]} style={styles.container}>
+        //<LinearGradient colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]} style={styles.container}>
             <ScrollView contentContainerStyle={styles.contentContainer}>
                 <Text style={styles.heading}>Welcome to UniFit</Text>
                 <View style={styles.separator} />
@@ -25,7 +25,7 @@ export default function AboutUs() {
                     Join our vibrant community of users and embark on a transformative experience towards better health and well-being. Let's make every step count!
                 </Text>
             </ScrollView>
-        </LinearGradient>
+        //</LinearGradient>
     );
 }
 const styles = StyleSheet.create({

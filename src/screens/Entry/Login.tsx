@@ -56,7 +56,7 @@ export default function Login() {
           </Pressable>
         </View>
         <EntryButton
-          text="Login"
+          text="Login1"
           textColor={Colors.White}
           buttonColor={Colors.HeaderGreen}
           margin={[30, 75, 0, 0]}

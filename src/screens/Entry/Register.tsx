@@ -16,8 +16,12 @@ export default function Entry() {
   const [error, setError] = useState('');
 
   const handleSignUp = async () => {
+    
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; // Simple email validation
+
+
     const status = await auth.signUp(email, password);
-    if (status != undefined) {
+    if (status != undefined && !emailRegex.test(email)) {
       setError(status);
     }
     else {
@@ -30,7 +34,7 @@ export default function Entry() {
   return (
     <View style={styles.container}>
       <View style={styles.rectangle}>
-        <Text style={styles.label}>Sign Up</Text>
+        <Text style={styles.label}>Sign Up.</Text>
         {error ? <Text style={styles.error}>{error}</Text> : null}
         <EntryInputField
           headerText="Email"

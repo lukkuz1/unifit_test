@@ -57,17 +57,17 @@ export default function StepGoal() {
   };
 
   return (
-    <LinearGradient
-      colors={
-        darkMode
-          ? [
-              Colors.DarkBackgroundGradientLower,
-              Colors.DarkBackgroundGradientUpper,
-            ]
-          : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]
-      }
-      style={styles.container}
-    >
+    //<LinearGradient
+      //colors={
+        //darkMode
+          //? [
+            //  Colors.DarkBackgroundGradientLower,
+             // Colors.DarkBackgroundGradientUpper,
+           // ]
+          //: [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]
+     // }
+     // style={styles.container}
+   // >
       <View style={styles.label}>
         <EntryInputField
           headerText=""
@@ -86,7 +86,7 @@ export default function StepGoal() {
           onPress={handleAddStepGoal}
         />
       </View>
-    </LinearGradient>
+   // </LinearGradient>
   );
 }
 

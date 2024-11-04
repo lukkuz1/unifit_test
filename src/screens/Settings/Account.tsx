@@ -47,10 +47,10 @@ export default function Account({ margin = [0, 100, 0, 0] }: Props) {
   };
 
   return (
-    <LinearGradient
+    /*<LinearGradient
       colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]}
       style={styles.container}
-    >
+    >*/
       <View
         style={[
           styles.rectangle,
@@ -142,7 +142,7 @@ export default function Account({ margin = [0, 100, 0, 0] }: Props) {
           </Pressable>
         </View>
       </View>
-    </LinearGradient>
+    //</LinearGradient>
   );
 }
 

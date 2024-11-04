@@ -2,9 +2,20 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-        "src/*": ["./src/*"]
-    }
+      "src/*": ["./src/*"],
+      "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
+    },
+    "jsx": "react-native",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"]  // Add essential types only
   },
   "include": ["src", "declarations.d.ts"],
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
+  "jest": {
+    "preset": "react-native",
+    "setupFiles": ["<rootDir>/jestSetup.js"]
+  }
 }

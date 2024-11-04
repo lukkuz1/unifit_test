@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { getAuth, updatePhoneNumber, updateEmail, PhoneAuthProvider } from '@firebase/auth';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { getAuth, updateEmail } from '@firebase/auth';
 import { LinearGradient } from 'expo-linear-gradient';
 import EntryInputField from 'src/components/Entry/EntryInputField';
 import EntryButton from 'src/components/Entry/EntryButton';
@@ -9,20 +8,33 @@ import Colors from 'src/constants/Colors';
 import useDarkModeToggle from 'src/hooks/useDarkModeToggle';
 
 const ProfileEdit = () => {
-  const navigation = useNavigation();
   const auth = getAuth();
-  const [phoneNumber, setPhoneNumber] = useState(auth.currentUser.phoneNumber || '');
   const [email, setEmail] = useState(auth.currentUser.email || '');
   const darkMode = useDarkModeToggle();
 
-  function handleUpdateProfile() {
-  }
+  const handleUpdateProfile = async () => {
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; // Simple email validation
+
+    if (!emailRegex.test(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      await updateEmail(auth.currentUser, email);
+      Alert.alert('Profile Updated', 'Your email has been successfully updated.');
+    } catch (error) {
+      Alert.alert('Update Failed', error.message);
+    }
+  };
 
   return (
-    <LinearGradient colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]} style={styles.container}>
+    //<LinearGradient
+      //colors={darkMode ? [Colors.DarkBackgroundGradientLower, Colors.DarkBackgroundGradientUpper] : [Colors.BackgroundGradientUpper, Colors.BackgroundGradientLower]}
+      //style={styles.container}
+    //>
       <View>
         <Text style={styles.label}>Edit your email</Text>
-
         <EntryInputField
           headerText="Email"
           placeholderText="Enter Email"
@@ -40,7 +52,7 @@ const ProfileEdit = () => {
           onPress={handleUpdateProfile}
         />
       </View>
-    </LinearGradient>
+    //</LinearGradient>
   );
 };
 
@@ -49,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 60,
     color: Colors.EntryLighterWhite,
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
     textAlign: 'center',
   },
   container: {
