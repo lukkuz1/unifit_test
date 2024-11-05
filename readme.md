@@ -1,3 +1,10 @@
+## Statinė kodo analizė, naudojame npm package (lint)
+```bash
+npm run lint
+```
+## Mums pateikiama kodo analizė ir kur gali būti blogas kodas
+
+
 ## Kaip testuosime?
 Naudosime jest Unit testų rašymui.
 
