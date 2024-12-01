@@ -4,7 +4,6 @@ import tsEslintPlugin from "@typescript-eslint/eslint-plugin";
 import tsEslintParser from "@typescript-eslint/parser";
 import pluginReact from "eslint-plugin-react";
 import pluginReactNative from "eslint-plugin-react-native";
-import tseslint from "typescript-eslint";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
