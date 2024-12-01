@@ -5,9 +5,6 @@ import tsEslintParser from "@typescript-eslint/parser";
 import pluginReact from "eslint-plugin-react";
 import pluginReactNative from "eslint-plugin-react-native";
 
-//add custom rules here:
-// import camelCaseFunctionNames from "./rules/camelCaseFunctionNames";
-
 /** @type {import('eslint').Linter.Config} */
 export default {
   files: ["src/hooks/**/*.{js,jsx,ts,tsx}", "src/components/**/*.{js,jsx,ts,tsx}"],
@@ -28,26 +25,59 @@ export default {
     "react-native": pluginReactNative, // React Native-specific plugin
   },
   rules: {
-    ...pluginJs.configs.recommended.rules,  // ESLint core recommended rules
-    ...tsEslintPlugin.configs.recommended.rules,  // TypeScript recommended rules
-    ...pluginReact.configs.flat.recommended.rules,  // React recommended rules
+    // ...pluginJs.configs.recommended.rules,  // ESLint core recommended rules
+    // ...tsEslintPlugin.configs.recommended.rules,  // TypeScript recommended rules
+    // ...pluginReact.configs.flat.recommended.rules,  // React recommended rules
 
     // React Native-specific rules
-    "react-native/no-unused-styles": "off",
-    "react-native/split-platform-components": "warn",
-    "react-native/no-inline-styles": "off",
-    "react-native/no-color-literals": "off",
-    "react-native/no-single-element-style-arrays": "warn",
+    // "react-native/no-unused-styles": "off",
+    // "react-native/split-platform-components": "warn",
+    // "react-native/no-inline-styles": "off",
+    // "react-native/no-color-literals": "off",
+    // "react-native/no-single-element-style-arrays": "warn",
 
     // Additional React and TypeScript rules for better control
-    "react/prop-types": "off",
-    "@typescript-eslint/explicit-function-return-type": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-    "@typescript-eslint/no-explicit-any": "warn",
-    "react/react-in-jsx-scope": "off",
+    // "react/prop-types": "off",
+    // "@typescript-eslint/explicit-function-return-type": "warn",
+    // "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    // "@typescript-eslint/no-explicit-any": "warn",
+    // "react/react-in-jsx-scope": "off",
 
-    // Custom rule for camelCase function names
-    // "custom/camelCaseFunctionNames": "warn",  // Enable custom rule with warning level
+    // Custom camelcase rule for enforcing camelCase naming convention
+    "camelcase": ["error", { "properties": "always" }],
+
+    // Custom rule 1: Enforce consistent indentation (2 spaces)
+    "indent": ["error", 2],
+
+    // Custom rule 2: Enforce single quotes for strings
+    "quotes": ["error", "single"],
+
+    // Custom rule 3: Enforce semicolons at the end of statements
+    "semi": ["error", "always"],
+
+    // Custom rule 4: Restrict maximum line length to 100 characters
+    "max-len": ["error", { "code": 100, "ignoreUrls": true }],
+
+    // Custom rule 5: Disallow console.log statements (for production code)
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+
+    // Custom rule 6: Require named function expressions
+    "func-names": ["error", "always"],
+
+    // Custom rule 7: Enforce consistent spacing inside curly braces in object literals
+    "object-curly-spacing": ["error", "always"],
+
+    // Custom rule 8: Disallow spaces before function parentheses
+    "space-before-function-paren": ["error", "never"],
+
+    // Custom rule 9: Disallow multiple empty lines
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
+
+    // Custom rule 10: Disallow usage of var (prefer let/const)
+    "no-var": "error",
+
+    // Custom rule 11: Enforce a newline before return statements
+    "newline-before-return": "error",
   },
   settings: {
     react: {
