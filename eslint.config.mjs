@@ -4,6 +4,14 @@ import tsEslintPlugin from "@typescript-eslint/eslint-plugin";
 import tsEslintParser from "@typescript-eslint/parser";
 import pluginReact from "eslint-plugin-react";
 import pluginReactNative from "eslint-plugin-react-native";
+import tseslint from "typescript-eslint";
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { createRequire } from 'module';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const require = createRequire(import.meta.url);
 
 /** @type {import('eslint').Linter.Config} */
 export default {
@@ -19,12 +27,25 @@ export default {
     parser: tsEslintParser, // TypeScript parser
     globals: globals.browser, // Globals setup
   },
+  
   plugins: {
     "@typescript-eslint": tsEslintPlugin,
     "react": pluginReact,
     "react-native": pluginReactNative, // React Native-specific plugin
+    'custom-rules': {
+        rules: {
+          'camel-case-function-names': require('./rules/camelCaseFunctionNames.js'),
+          'lowercase-variable-start': require('./rules/lowercaseVariables.js'),
+          'detect-unused-imports': require('./rules/detectUnusedImports.js')
+        }
+      }
   },
+  
   rules: {
+
+    'custom-rules/camel-case-function-names': 'error',
+      'custom-rules/lowercase-variable-start': 'error',
+      'custom-rules/detect-unused-imports': 'error',
     // ...pluginJs.configs.recommended.rules,  // ESLint core recommended rules
     // ...tsEslintPlugin.configs.recommended.rules,  // TypeScript recommended rules
     // ...pluginReact.configs.flat.recommended.rules,  // React recommended rules
@@ -84,4 +105,5 @@ export default {
       version: "detect",
     },
   },
+  
 };
